@@ -1,20 +1,32 @@
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import { helperActions } from "../store/helperSlice";
-import { useNavigate } from "react-router-dom";
 
-const AddHelper = () => {
+const EditHelper = () => {
+  const { helperId } = useParams();
+
+  const helperDetails = useSelector((state) => state.helpers.helpers).filter(
+    (item) => item.id === parseInt(helperId)
+  )[0];
+
+  localStorage.clear();
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const id = Math.floor(Math.random() * 100000);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const fd = new FormData(e.target);
-    dispatch(helperActions.addHelperDetails({ id, ...Object.fromEntries(fd) }));
-    navigate(`/helper-days/${id}`);
+    dispatch(
+      helperActions.editHelperDetails({
+        id: parseInt(helperId),
+        ...Object.fromEntries(fd),
+      })
+    );
+    navigate(`/edit-days/${helperId}`);
   };
 
+  console.log(helperDetails);
   return (
     <div>
       <h3>Helper Form</h3>
@@ -26,6 +38,7 @@ const AddHelper = () => {
             id="name"
             name="name"
             placeholder="Enter name"
+            defaultValue={helperDetails.name}
           />
         </div>
         <div className="form-group">
@@ -37,6 +50,7 @@ const AddHelper = () => {
             name="email"
             aria-describedby="emailHelp"
             placeholder="Enter email"
+            defaultValue={helperDetails.email}
           />
         </div>
         <div className="form-group">
@@ -46,6 +60,7 @@ const AddHelper = () => {
             id="phone"
             name="phone"
             placeholder="Enter phone number"
+            defaultValue={helperDetails.phone}
           />
         </div>
         <div className="form-group">
@@ -55,6 +70,7 @@ const AddHelper = () => {
             id="mobile"
             name="mobile"
             placeholder="Enter mobile number"
+            defaultValue={helperDetails.mobile}
           />
         </div>
         <button type="submit" className="btn btn-primary nextButton">
@@ -65,4 +81,4 @@ const AddHelper = () => {
   );
 };
 
-export default AddHelper;
+export default EditHelper;

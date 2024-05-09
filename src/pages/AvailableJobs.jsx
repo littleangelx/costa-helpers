@@ -9,13 +9,13 @@ const AvailableJobs = () => {
 
   return (
     <div>
-      <button
+      {/* <button
         type="button"
         className="btn btn-danger"
         onClick={() => setAddJob(true)}
       >
         Add Job
-      </button>
+      </button> */}
       <div className="availableJobs">
         <div className="availableJob">
           <p>Job</p>
@@ -24,7 +24,7 @@ const AvailableJobs = () => {
           <p>Helpers Needed</p>
           <p>Days Needed</p>
         </div>
-        {addJob && <JobRow id={availableJobs.length} isEdit={true} />}
+        {/* {addJob && <JobRow id={availableJobs.length} isEdit={true} />} */}
         {availableJobs.map((job) => (
           <JobRow key={job.id} {...job} />
         ))}

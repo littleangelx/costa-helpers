@@ -102,10 +102,10 @@ const JobRow = ({
       <button type="submit" className="btn btn-success">
         {isEditable ? "Save" : "Edit"}
       </button>
-      <i
+      {/* <i
         className="fa-regular fa-trash-can deleteIcon"
         onClick={() => dispatch(jobsActions.deleteJob(id))}
-      ></i>
+      ></i> */}
     </form>
   );
 };

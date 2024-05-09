@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { helperActions } from "../store/helperSlice";
 import { allocationActions } from "../store/allocationSlice";
 
-const HelperDays = () => {
+const EditHelperDays = () => {
   const { helperId } = useParams();
 
   const [days, setDays] = useState({
@@ -45,6 +45,13 @@ const HelperDays = () => {
       helperActions.addHelperDays({
         id: parseInt(helperId),
         name: helperName,
+        ...days,
+      })
+    );
+    dispatch(
+      allocationActions.initiateHelper({
+        helperId: parseInt(helperId),
+        helperName,
         ...days,
       })
     );
@@ -219,24 +226,16 @@ const HelperDays = () => {
           type="button"
           className="btn btn-primary nextButton"
           style={{ marginTop: "3rem" }}
-          onClick={handleSetDays}
-        >
-          Save
-        </button>
-        <button
-          type="button"
-          className="btn btn-primary nextButton"
-          style={{ marginTop: "3rem" }}
           onClick={() => {
             handleSetDays();
-            navigate(`/helper-preferences/${helperId}`);
+            // navigate("/all-helpers");
           }}
         >
-          Save & Next
+          Save
         </button>
       </div>
     </div>
   );
 };
 
-export default HelperDays;
+export default EditHelperDays;

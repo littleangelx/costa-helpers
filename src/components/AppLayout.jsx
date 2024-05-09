@@ -9,17 +9,18 @@ const AppLayout = () => {
       </div>
       <Menu className="menu">
         <Link to="/add-helper">Add Helper</Link>
-        <Link to="/available-jobs">Available Jobs</Link>
+        {/* <Link to="/available-jobs">Available Jobs</Link> */}
+        <Link to="/all-helpers">All Helpers</Link>
         <h3 className="heading">Job Allocation</h3>
         <Link to="/allocation/wed">Wednesday</Link>
         <Link to="/allocation/thurs">Thursday</Link>
         <Link to="/allocation/fri">Friday</Link>
         <h3 className="heading">Timetable</h3>
-        <Link>Wednesday</Link>
-        <Link>Thursday</Link>
-        <Link>Friday</Link>
-        <h3 className="heading"></h3>
-        <Link>Jobs for Helpers</Link>
+        <Link to="/timetable/wed">Wednesday</Link>
+        <Link to="/timetable/thurs">Thursday</Link>
+        <Link to="/timetable/fri">Friday</Link>
+        {/* <h3 className="heading"></h3>
+        <Link>Jobs for Helpers</Link> */}
       </Menu>
       <main>
         <Outlet />

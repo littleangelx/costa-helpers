@@ -3,9 +3,23 @@ import { createSlice, current } from "@reduxjs/toolkit";
 const initialState = {
   jobs: JSON.parse(localStorage.getItem("availableJobs")) || [
     {
+      id: 33,
+      name: "Morning Lifts",
+      startTime: 9.15,
+      fixedStartTime: 9,
+      endTime: 10.3,
+      needed: 10,
+      days: [
+        { value: "wed", label: "Wed" },
+        { value: "thurs", label: "Thurs" },
+        { value: "fri", label: "Fri" },
+      ],
+    },
+    {
       id: 0,
       name: "Kitchen Assistants",
       startTime: 9,
+      fixedStartTime: 9,
       endTime: 14,
       needed: 4,
       days: [
@@ -18,6 +32,8 @@ const initialState = {
       id: 1,
       name: "Morning Car Park Stewards",
       startTime: 9.45,
+      fixedStartTime: 9,
+
       endTime: 10.3,
       needed: 3,
       days: [
@@ -30,6 +46,8 @@ const initialState = {
       id: 2,
       name: "Welcome Desk",
       startTime: 9.45,
+      fixedStartTime: 9,
+
       endTime: 13,
       needed: 2,
       days: [
@@ -42,6 +60,8 @@ const initialState = {
       id: 3,
       name: "Morning Coats",
       startTime: 9.45,
+      fixedStartTime: 9,
+
       endTime: 10.3,
       needed: 3,
       days: [
@@ -54,6 +74,8 @@ const initialState = {
       id: 4,
       name: "Head Waiter",
       startTime: 9.45,
+      fixedStartTime: 9,
+
       endTime: 11.45,
       needed: 1,
       days: [
@@ -66,6 +88,8 @@ const initialState = {
       id: 5,
       name: "Arrival Cafe Servers",
       startTime: 9.45,
+      fixedStartTime: 9,
+
       endTime: 10.3,
       needed: 5,
       days: [
@@ -78,6 +102,8 @@ const initialState = {
       id: 6,
       name: "Welcomers",
       startTime: 9.45,
+      fixedStartTime: 9,
+
       endTime: 10.3,
       needed: 3,
       days: [
@@ -90,6 +116,8 @@ const initialState = {
       id: 7,
       name: "Cashier",
       startTime: 9.45,
+      fixedStartTime: 9,
+
       endTime: 11.45,
       needed: 1,
       days: [
@@ -102,6 +130,8 @@ const initialState = {
       id: 8,
       name: "Workshop Lead",
       startTime: 10.3,
+      fixedStartTime: 10.3,
+
       endTime: 11.3,
       needed: 1,
       days: [
@@ -114,6 +144,8 @@ const initialState = {
       id: 9,
       name: "Workshop Helpers",
       startTime: 10.3,
+      fixedStartTime: 10.3,
+
       endTime: 11.3,
       needed: 3,
       days: [
@@ -126,6 +158,8 @@ const initialState = {
       id: 10,
       name: "Activities Lead",
       startTime: 10.3,
+      fixedStartTime: 10.3,
+
       endTime: 11.45,
       needed: 1,
       days: [
@@ -138,6 +172,8 @@ const initialState = {
       id: 11,
       name: "Activities Helpers",
       startTime: 10.3,
+      fixedStartTime: 10.3,
+
       endTime: 11.45,
       needed: 15,
       days: [
@@ -150,6 +186,8 @@ const initialState = {
       id: 12,
       name: "Spa",
       startTime: 10.3,
+      fixedStartTime: 10.3,
+
       endTime: 11.45,
       needed: 4,
       days: [
@@ -162,6 +200,8 @@ const initialState = {
       id: 13,
       name: "Photographer",
       startTime: 10.3,
+      fixedStartTime: 10.3,
+
       endTime: 11.45,
       needed: 1,
       days: [
@@ -174,6 +214,8 @@ const initialState = {
       id: 14,
       name: "Cafe",
       startTime: 10.3,
+      fixedStartTime: 10.3,
+
       endTime: 11.45,
       needed: 4,
       days: [
@@ -186,6 +228,8 @@ const initialState = {
       id: 15,
       name: "Stalls Supervisor",
       startTime: 10.3,
+      fixedStartTime: 10.3,
+
       endTime: 11.45,
       needed: 1,
       days: [
@@ -198,6 +242,8 @@ const initialState = {
       id: 16,
       name: "Stalls Helpers",
       startTime: 10.3,
+      fixedStartTime: 10.3,
+
       endTime: 11.45,
       needed: 3,
       days: [
@@ -210,6 +256,8 @@ const initialState = {
       id: 17,
       name: "Serve Sherry",
       startTime: 11.45,
+      fixedStartTime: 11.45,
+
       endTime: 12,
       needed: 3,
       days: [
@@ -222,6 +270,8 @@ const initialState = {
       id: 18,
       name: "Maitre d'",
       startTime: 11.5,
+      fixedStartTime: 11.45,
+
       endTime: 13.15,
       needed: 1,
       days: [
@@ -234,6 +284,8 @@ const initialState = {
       id: 19,
       name: "Lunch Servers",
       startTime: 11.5,
+      fixedStartTime: 11.45,
+
       endTime: 13.15,
       needed: 6,
       days: [
@@ -246,6 +298,8 @@ const initialState = {
       id: 20,
       name: "Thought for the Day",
       startTime: 12.05,
+      fixedStartTime: 12,
+
       endTime: 12.15,
       needed: 1,
       days: [
@@ -258,6 +312,8 @@ const initialState = {
       id: 21,
       name: "Wash up Kitchen",
       startTime: 12.15,
+      fixedStartTime: 12,
+
       endTime: 14,
       needed: 1,
       days: [
@@ -270,6 +326,8 @@ const initialState = {
       id: 22,
       name: "Wash up Back of Church",
       startTime: 12.15,
+      fixedStartTime: 12,
+
       endTime: 14,
       needed: 3,
       days: [
@@ -282,6 +340,8 @@ const initialState = {
       id: 23,
       name: "Washing up Trolley",
       startTime: 12.15,
+      fixedStartTime: 12,
+
       endTime: 14,
       needed: 2,
       days: [
@@ -294,6 +354,8 @@ const initialState = {
       id: 24,
       name: "Trip Coats",
       startTime: 13.15,
+      fixedStartTime: 12,
+
       endTime: 14,
       needed: 3,
       days: [
@@ -301,11 +363,24 @@ const initialState = {
         { value: "thurs", label: "Thurs" },
       ],
     },
-
+    {
+      id: 34,
+      name: "Trip Lifts",
+      startTime: 13.3,
+      fixedStartTime: 13.3,
+      endTime: 16.45,
+      needed: 4,
+      days: [
+        { value: "wed", label: "Wed" },
+        { value: "thurs", label: "Thurs" },
+      ],
+    },
     {
       id: 25,
       name: "Trip Escorts",
       startTime: 13.3,
+      fixedStartTime: 13.3,
+
       endTime: 16.45,
       needed: 11,
       days: [
@@ -317,6 +392,8 @@ const initialState = {
       id: 26,
       name: "Film Lead",
       startTime: 13.3,
+      fixedStartTime: 13.3,
+
       endTime: 16.15,
       needed: 1,
       days: [
@@ -328,6 +405,8 @@ const initialState = {
       id: 27,
       name: "Film Helpers",
       startTime: 13.3,
+      fixedStartTime: 13.3,
+
       endTime: 16.15,
       needed: 2,
       days: [
@@ -339,6 +418,8 @@ const initialState = {
       id: 28,
       name: "Serve Ice Creams",
       startTime: 15,
+      fixedStartTime: 13.3,
+
       endTime: 16,
       needed: 2,
       days: [
@@ -350,6 +431,8 @@ const initialState = {
       id: 29,
       name: "Set up Afternoon Tea",
       startTime: 15,
+      fixedStartTime: 13.3,
+
       endTime: 16.15,
       needed: 2,
       days: [
@@ -363,6 +446,8 @@ const initialState = {
       id: 30,
       name: "Clearing and Setting up Friday Afternoon Activities",
       startTime: 12,
+      fixedStartTime: 12,
+
       endTime: 14,
       needed: 8,
       days: [{ value: "fri", label: "Fri" }],
@@ -371,6 +456,8 @@ const initialState = {
       id: 31,
       name: "Evening Coats",
       startTime: 17,
+      fixedStartTime: 16.45,
+
       endTime: 18,
       needed: 3,
       days: [
@@ -383,8 +470,23 @@ const initialState = {
       id: 32,
       name: "Evening Car Park Stewards",
       startTime: 17,
+      fixedStartTime: 16.45,
+
       endTime: 18,
       needed: 3,
+      days: [
+        { value: "wed", label: "Wed" },
+        { value: "thurs", label: "Thurs" },
+        { value: "fri", label: "Fri" },
+      ],
+    },
+    {
+      id: 35,
+      name: "Evening Lifts",
+      startTime: 17,
+      fixedStartTime: 16.45,
+      endTime: 18,
+      needed: 10,
       days: [
         { value: "wed", label: "Wed" },
         { value: "thurs", label: "Thurs" },
@@ -414,6 +516,16 @@ const jobsSlice = createSlice({
     deleteJob(state, action) {
       state.jobs = state.jobs.filter((job) => job.id !== action.payload);
       localStorage.setItem("availableJobs", JSON.stringify(state.jobs));
+    },
+    assignHelper(state, action) {
+      const foundItem = state.jobs.find(
+        (job) => job.id === action.payload.jobId
+      );
+      if (foundItem[action.payload.day]) {
+        foundItem[action.payload.day].push(...action.payload.helperNames);
+      } else {
+        foundItem[action.payload.day] = action.payload.helperNames;
+      }
     },
   },
 });

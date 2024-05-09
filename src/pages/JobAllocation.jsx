@@ -2,9 +2,13 @@ import { useSelector } from "react-redux";
 
 import JobAllocationItem from "./JobAllocationItem";
 import { useParams } from "react-router-dom";
+import { useReducer, useState } from "react";
+import LiftAllocationItem from "./LiftAllocationItem";
 
 const JobAllocation = () => {
   const { day } = useParams();
+
+  const [, forceUpdate] = useReducer((x) => x + 1, 0);
 
   const jobList = useSelector((state) => state.jobs.jobs);
 
@@ -32,9 +36,11 @@ const JobAllocation = () => {
 
       <h4>9.00 - 10.30</h4>
       <div className="rowContainer">
-        {filterJobs(9, 10.3).map((job) => (
-          <JobAllocationItem key={job.id} job={job} day={day} startTime={9} />
-        ))}
+        {filterJobs(9, 10.3).map((job) => {
+          return (
+            <JobAllocationItem key={job.id} job={job} day={day} startTime={9} />
+          );
+        })}
       </div>
       <h4>10.30 - 11.45</h4>
       <div className="rowContainer">

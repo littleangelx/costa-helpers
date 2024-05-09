@@ -1,14 +1,48 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { helperActions } from "../store/helperSlice";
+import { allocationActions } from "../store/allocationSlice";
 
 const HelperPreferences = () => {
   const { helperId } = useParams();
 
+  const [days, setDays] = useState({});
+
   const helperName = useSelector((state) => state.helpers.helpers).filter(
     (helper) => helper.id === parseInt(helperId)
   )[0].name;
+
+  const helperDays = useSelector((state) => state.helpers.helperDays).filter(
+    (helper) => helper.id === parseInt(helperId)
+  )[0];
+
+  useEffect(() => {
+    if (helperDays) {
+      setDays({
+        wedAm: helperDays["wedAm"] ?? false,
+        wedPm: helperDays["wedPm"] ?? false,
+        thursAm: helperDays["thursAm"] ?? false,
+        thursPm: helperDays["thursPm"] ?? false,
+        friAm: helperDays["friAm"] ?? false,
+        friPm: helperDays["friPm"] ?? false,
+      });
+    }
+  }, [helperDays]);
+
+  useEffect(() => {
+    dispatch(
+      allocationActions.initiateHelper({
+        helperId: parseInt(helperId),
+        helperName,
+        ...days,
+      })
+    );
+  }, [days]);
+
+  const helperPref = useSelector(
+    (state) => state.helpers.helperJobPreferences
+  ).filter((helper) => helper.helperId === parseInt(helperId))[0];
 
   const availableJobs = useSelector((state) => state.jobs.jobs);
 
@@ -16,18 +50,52 @@ const HelperPreferences = () => {
   const [definiteJobs, setDefiniteJobs] = useState([]);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const makeDefinite = (job) => {
+    setDefiniteJobs((prev) => [...prev, job.name]);
+    const startTime = job.fixedStartTime;
+    dispatch(
+      allocationActions.addDefinite({
+        helperId: parseInt(helperId),
+        startTime,
+        jobName: job.name,
+        days: job.days,
+      })
+    );
+    document.getElementById(job.name).checked = true;
+  };
+
+  const clearDefinite = (job) => {
+    const filteredJobs = definiteJobs.filter((item) => item != job.name);
+    setDefiniteJobs(filteredJobs);
+    const startTime = job.fixedStartTime;
+    dispatch(
+      allocationActions.removeDefinitePreference({
+        helperId: parseInt(helperId),
+        startTime,
+        jobName: job.name,
+      })
+    );
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const numWalkers =
+      document.querySelector("input[name=numWalkers]") &&
+      document.querySelector("input[name=numWalkers]:checked").value;
     const fd = new FormData(e.target);
+
     dispatch(
       helperActions.addHelperJobPreferences({
-        helperId,
+        helperId: parseInt(helperId),
         helperName,
         definiteJobs,
+        numWalkers,
         ...Object.fromEntries(fd),
       })
     );
+    navigate("/add-helper");
   };
 
   return (
@@ -57,6 +125,11 @@ const HelperPreferences = () => {
             <input
               className="form-check-input"
               type="checkbox"
+              defaultChecked={
+                helperPref &&
+                helperPref["monSetup"] &&
+                helperPref["monSetup"] === "on"
+              }
               id="monSetup"
               name="monSetup"
             />
@@ -75,6 +148,11 @@ const HelperPreferences = () => {
             <input
               className="form-check-input"
               type="checkbox"
+              defaultChecked={
+                helperPref &&
+                helperPref["tuesSetup"] &&
+                helperPref["tuesSetup"] === "on"
+              }
               id="tuesSetup"
               name="tuesSetup"
             />
@@ -93,6 +171,11 @@ const HelperPreferences = () => {
             <input
               className="form-check-input"
               type="checkbox"
+              defaultChecked={
+                helperPref &&
+                helperPref["takeDown"] &&
+                helperPref["takeDown"] === "on"
+              }
               id="takeDown"
               name="takeDown"
             />
@@ -106,15 +189,20 @@ const HelperPreferences = () => {
             placeholder="Times available"
           />
         </div>
-        <div className="rowContainer">
+        {/* <div className="rowContainer">
           <div className="form-check">
             <input
               className="form-check-input"
               type="checkbox"
-              id="liftsWed"
-              name="liftsWed"
+              defaultChecked={
+                helperPref &&
+                helperPref["wedLifts"] &&
+                helperPref["wedLifts"] === "on"
+              }
+              id="wedLifts"
+              name="wedLifts"
             />
-            <label className="form-check-label" htmlFor="liftsWed">
+            <label className="form-check-label" htmlFor="wedLifts">
               Lifts Wed
             </label>
           </div>
@@ -122,10 +210,15 @@ const HelperPreferences = () => {
             <input
               className="form-check-input"
               type="checkbox"
-              id="liftsThurs"
-              name="liftsThurs"
+              defaultChecked={
+                helperPref &&
+                helperPref["thursLifts"] &&
+                helperPref["thursLifts"] === "on"
+              }
+              id="thursLifts"
+              name="thursLifts"
             />
-            <label className="form-check-label" htmlFor="liftsThurs">
+            <label className="form-check-label" htmlFor="thursLifts">
               Lifts Thurs
             </label>
           </div>
@@ -133,10 +226,15 @@ const HelperPreferences = () => {
             <input
               className="form-check-input"
               type="checkbox"
-              id="liftsFri"
-              name="liftsFri"
+              defaultChecked={
+                helperPref &&
+                helperPref["friLifts"] &&
+                helperPref["friLifts"] === "on"
+              }
+              id="friLifts"
+              name="friLifts"
             />
-            <label className="form-check-label" htmlFor="liftsFri">
+            <label className="form-check-label" htmlFor="friLifts">
               Lifts Fri
             </label>
           </div>
@@ -144,11 +242,32 @@ const HelperPreferences = () => {
             <input
               className="form-check-input"
               type="checkbox"
-              id="liftsTrip"
-              name="liftsTrip"
+              defaultChecked={
+                helperPref &&
+                helperPref["wedLiftsTrip"] &&
+                helperPref["wedLiftsTrip"] === "on"
+              }
+              id="wedLiftsTrip"
+              name="wedLiftsTrip"
             />
-            <label className="form-check-label" htmlFor="liftsTrip">
-              Lifts Trips
+            <label className="form-check-label" htmlFor="wedLiftsTrip">
+              Lifts Trips Wed
+            </label>
+          </div>
+          <div className="form-check">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              defaultChecked={
+                helperPref &&
+                helperPref["thursLiftsTrip"] &&
+                helperPref["thursLiftsTrip"] === "on"
+              }
+              id="thursLiftsTrip"
+              name="thursLiftsTrip"
+            />
+            <label className="form-check-label" htmlFor="thursLiftsTrip">
+              Lifts Trips Thurs
             </label>
           </div>
           <p>Number of walkers {helperName.split(" ")[0]} can take:</p>
@@ -157,6 +276,12 @@ const HelperPreferences = () => {
               className="form-check-input"
               type="radio"
               id="inlineCheckbox1"
+              defaultChecked={
+                (helperPref &&
+                  helperPref["numWalkers"] &&
+                  helperPref["numWalkers"] == 0) ||
+                true
+              }
               value="0"
               name="numWalkers"
             />
@@ -169,6 +294,12 @@ const HelperPreferences = () => {
               className="form-check-input"
               type="radio"
               id="inlineCheckbox2"
+              defaultChecked={
+                (helperPref &&
+                  helperPref["numWalkers"] &&
+                  helperPref["numWalkers"] == 1) ||
+                false
+              }
               value="1"
               name="numWalkers"
             />
@@ -181,6 +312,12 @@ const HelperPreferences = () => {
               className="form-check-input"
               type="radio"
               id="inlineCheckbox3"
+              defaultChecked={
+                (helperPref &&
+                  helperPref["numWalkers"] &&
+                  helperPref["numWalkers"] == 2) ||
+                false
+              }
               value="2"
               name="numWalkers"
             />
@@ -188,7 +325,7 @@ const HelperPreferences = () => {
               2
             </label>
           </div>
-        </div>
+        </div> */}
         <div className="rowContainer anyJob">
           <div className="form-check">
             <input
@@ -209,9 +346,14 @@ const HelperPreferences = () => {
           <div key={job.id} className="rowContainer">
             <div className="form-check">
               <input
-                className="form-check-input"
+                className="form-check-input checkboxHelper"
                 type="checkbox"
-                defaultChecked={helpWherever}
+                defaultChecked={
+                  (helperPref &&
+                    helperPref[job.name] &&
+                    helperPref[job.name] === "on") ||
+                  helpWherever
+                }
                 id={job.name}
                 name={job.name}
               />
@@ -223,36 +365,23 @@ const HelperPreferences = () => {
                 type="button"
                 style={{
                   backgroundColor:
-                    definiteJobs.filter((item) => item.jobId == job.id).length >
-                    0
+                    definiteJobs.filter((item) => item == job.name).length > 0
                       ? "blueviolet"
                       : "white",
                   color:
-                    definiteJobs.filter((item) => item.jobId == job.id).length >
-                    0
+                    definiteJobs.filter((item) => item == job.name).length > 0
                       ? "white"
                       : "black",
                 }}
-                onClick={() =>
-                  setDefiniteJobs((prev) => [
-                    ...prev,
-                    { jobId: job.id, name: job.name },
-                  ])
-                }
-              >
-                Make definite
-              </button>
-              <button
-                className="definiteButton"
-                type="button"
                 onClick={() => {
-                  const filteredJobs = definiteJobs.filter(
-                    (item) => item.jobId != job.id
-                  );
-                  setDefiniteJobs(filteredJobs);
+                  definiteJobs.filter((item) => item == job.name).length > 0
+                    ? clearDefinite(job)
+                    : makeDefinite(job);
                 }}
               >
-                Clear definite
+                {definiteJobs.filter((item) => item == job.name).length > 0
+                  ? "Clear definite"
+                  : "Make definite"}
               </button>
             </div>
           </div>
@@ -271,6 +400,7 @@ const HelperPreferences = () => {
           onClick={() => {
             setDefiniteJobs([]);
             setHelpWherever(false);
+            document.querySelectorAll("checkbox").checked = false;
           }}
         >
           Reset
